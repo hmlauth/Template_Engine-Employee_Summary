@@ -29,45 +29,46 @@ function init() {
     .then(({name, id, email, officeNumber}) => {
         let manager = new Manager(name, id, email, officeNumber);
         employeeList.push(manager);
-        promptMenu();
+        getEmployee();
     })
 }
 
-function promptMenu() {
+function getEmployee() {
     inquirer
     .prompt(menuQuestions)
     .then(({userChoice}) => {
         switch (userChoice) {
             case 'Engineer':
-                promptEngineer();
+                getEngineer();
                 break;
             case 'Intern':
-                promptIntern();
+                getIntern();
                 break;
             case 'Exit':
                 displayHtml(employeeList);
+                // TODO - How to export employee list keeping functions and display logic separate
                 break;
         }
     })
 }
 
-function promptEngineer() {
+function getEngineer() {
     inquirer
     .prompt(employeeQuestions.concat(engineerQuestions))
     .then(({name, id, email, githubUsername}) => {
         let engineer = new Engineer(name, id, email, githubUsername);
         employeeList.push(engineer);
-        promptMenu();
+        getEmployee();
     })
 }
 
-function promptIntern() {
+function getIntern() {
     inquirer
     .prompt(employeeQuestions.concat(internQuestions))
     .then(({name, id, email, school})=> {
         let intern = new Intern(name, id, email, school);
         employeeList.push(intern)
-        promptMenu();
+        getEmployee();
     })
 }
 
