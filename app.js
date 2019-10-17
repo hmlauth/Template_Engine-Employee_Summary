@@ -65,7 +65,7 @@ function getEngineer() {
 function getIntern() {
     inquirer
     .prompt(employeeQuestions.concat(internQuestions))
-    .then(({name, id, email, school})=> {
+    .then(({name, id, email, school}) => {
         let intern = new Intern(name, id, email, school);
         employeeList.push(intern)
         getEmployee();

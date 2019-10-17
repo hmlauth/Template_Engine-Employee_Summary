@@ -2,6 +2,20 @@ const DEBUG = false;
 const fs = require('fs');
 const path = require('path');
 
+[`<p>
+    Engineer
+</p>`,
+`<p>
+    Intern
+</p>`,`<p>Intern</p>`].join('')
+
+`
+<p>Engineer</p>
+<p>Intern</p>
+<p>Intern</p>
+`
+
+
 function createCards(employeeList) {
     return employeeList.map(employee => {
         return `
@@ -24,7 +38,7 @@ function createCards(employeeList) {
                 </p>
             </div>
         </div>`
-    }).join('')
+    }).join('\n')
 };
 
 function renderDetail(employee) {
@@ -75,7 +89,7 @@ function displayHtml(employeeList) {
     const employeeCards = createCards(employeeList);
     const html = addCardsToHtmlBody(employeeCards);
 
-    fs.writeFile(path.join(__dirname, '../output', 'index.html'), html, err => {
+    fs.writeFile(path.join(__dirname, '..', 'output', 'index.html'), html, err => {
         if (err) throw err;
         console.log('Success!');
     });
