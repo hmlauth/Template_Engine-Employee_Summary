@@ -8,7 +8,7 @@ const Intern = require('./lib/Intern');
 
 // Questions
 const {
-    menuQuestions,
+    employeeTypeQuestions,
     employeeQuestions,
     managerQuestions,
     engineerQuestions,
@@ -64,7 +64,7 @@ async function createTeam() {
             async function getEmployee() {
                 try {
                 inquirer
-                    .prompt(menuQuestions)
+                    .prompt(employeeTypeQuestions)
                     .then(async ({ employeeType }) => {
                         if (employeeType === "Engineer") {
                             return { engineer } = await getEngineer();
@@ -82,7 +82,7 @@ async function createTeam() {
                         }
                     })
                 } catch (err) {
-                    console.log(err)
+                    reject(err)
                 }
             }
             
@@ -93,9 +93,12 @@ async function createTeam() {
     })
 }
 
+async function test() {
+    let finalTeam = await createTeam();
+    console.log(finalTeam);
+}
 
-let finalTeam = await createTeam();
-
+test();
 
 
 
