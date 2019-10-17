@@ -16,77 +16,86 @@ const {
 } = require('./lib/questions');
 
 
-// Asks questions and returns Manager {name, id, email, officeNumber}
-async function getManager() {
-    try {
-        const { name, id, email, officeNumber } = await inquirer.prompt(employeeQuestions.concat(managerQuestions));
-        return new Manager(name, id, email, officeNumber)
-    } catch (err) {
-        throw err
-    }
-}
+async function createEmployee(employeeType) {
+    console.log('Employee Type', employeeType);
+    let employee;
 
-// Asks questions and returns Engineer {name, id, email, github}
-async function getEngineer() {
     try {
-        const { name, id, email, githubUsername } = await inquirer.prompt(employeeQuestions.concat(engineerQuestions));
-        return new Engineer(name, id, email, githubUsername)
-    } catch (err) {
-        throw err
-    }
-}
 
-// Asks questions and returns Intern {name, id, email, school}
-async function getIntern() {
-    try {
-        const { name, id, email, school } = await inquirer.prompt(employeeQuestions.concat(internQuestions));
-        return new Intern(name, id, email, school)
+        if (employeeType === 'Manager') {
+
+            employee = await inquirer
+                .prompt(employeeQuestions.concat(managerQuestions));
+
+            const { name, id, email, officeNumber } = employee;
+            return new Manager(name, id, email, officeNumber)
+
+        } else if (employeeType === 'Engineer') {
+
+            employee = await inquirer
+                .prompt(employeeQuestions.concat(engineerQuestions));
+
+            const { name, id, email, githubUsername } = employee
+            return new Engineer(name, id, email, githubUsername)
+
+        } else if (employeeType === 'Intern') {
+
+            employee = await inquirer
+                .prompt(employeeQuestions.concat(internQuestions));
+
+            const { name, id, email, school } = employee;
+            return new Intern(name, id, email, school)
+
+        }
+
     } catch (err) {
-        throw err
+        console.log(err)
+
     }
+
+
 }
 
 // Returns an array of all team members
 async function createTeam() {
-    
+
     const team = [];
 
     return new Promise(async (resolve, reject) => {
         try {
 
             // Get manager and push to team array
-            let manager = await getManager();
+            let manager = await createEmployee('Manager');
             team.push(manager);
-    
+            console.log('TEAM', team);
+
             // Get next employee
             await getEmployee();
 
             async function getEmployee() {
                 try {
-                inquirer
-                    .prompt(employeeTypeQuestions)
-                    .then(async ({ employeeType }) => {
-                        if (employeeType === "Engineer") {
-                            return { engineer } = await getEngineer();
-                        } else if (employeeType === "Intern") {
-                            return { intern } = await getIntern();
-                        } else {
-                            employee = null
-                        }
-                    }).then(employee => {
-                        if (employee) {
-                            team.push(employee);
-                            getEmployee();
-                        } else {
-                            resolve(team)
-                        }
-                    })
+                    inquirer
+                        .prompt(employeeTypeQuestions)
+                        .then(async ({ employeeType }) => {
+                            if (employeeType) {
+                                return { employee } = await createEmployee(employeeType)
+                            } else {
+                                return null
+                            }
+                        }).then(employee => {
+                            if (employee) {
+                                team.push(employee);
+                                getEmployee();
+                            } else {
+                                resolve(team)
+                            }
+                        })
                 } catch (err) {
                     reject(err)
                 }
             }
-            
-    
+
+
         } catch (err) {
             console.log(err)
         }
