@@ -2,20 +2,6 @@ const DEBUG = false;
 const fs = require('fs');
 const path = require('path');
 
-[`<p>
-    Engineer
-</p>`,
-`<p>
-    Intern
-</p>`,`<p>Intern</p>`].join('')
-
-`
-<p>Engineer</p>
-<p>Intern</p>
-<p>Intern</p>
-`
-
-
 function createCards(employeeList) {
     return employeeList.map(employee => {
         return `
