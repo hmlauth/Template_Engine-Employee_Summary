@@ -16,6 +16,7 @@ const {
 } = require('./lib/questions');
 
 
+// ROUTINE TASKS
 // Asks questions and returns Manager {name, id, email, officeNumber}
 async function getManager() {
     try {
@@ -46,6 +47,40 @@ async function getIntern() {
     }
 }
 
+/// DEMO
+
+async function getSingleEmployee(employeeType) {
+
+    let Klass;
+    let questions;
+
+    switch (employeeType) {
+        case 'Engineer':
+            Klass = Engineer;
+            questions = engineerQuestions
+            break;
+        case 'Intern':
+            Klass = Intern;
+            questions = internQuestions
+            break;
+        case 'Manager':
+            Klass = Manager;
+            questions = managerQuestions
+            break;
+    }
+
+    try {
+
+        let data = await inquirer.prompt(employeeQuestions.concat(questions));
+        return new Klass(data)
+
+    } catch (err) {
+        throw err
+    }
+}
+
+////////
+
 // Returns an array of all team members
 async function createTeam() {
     
@@ -55,7 +90,7 @@ async function createTeam() {
         try {
 
             // Get manager and push to team array
-            let manager = await getManager();
+            let manager = await getSingleEmployee("Manager");
             team.push(manager);
     
             // Get next employee
@@ -67,9 +102,10 @@ async function createTeam() {
                     .prompt(employeeTypeQuestions)
                     .then(async ({ employeeType }) => {
                         if (employeeType === "Engineer") {
-                            return { engineer } = await getEngineer();
+                            console.log('>>>>>', await getSingleEmployee(employeeType));
+                            return { engineer } = await getSingleEmployee(employeeType);
                         } else if (employeeType === "Intern") {
-                            return { intern } = await getIntern();
+                            return { intern } = await getSingleEmployee(employeeType);
                         } else {
                             employee = null
                         }
